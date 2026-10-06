@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TỰ ĐỘNG ĐỊNH DẠNG VĂN BẢN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font Nunito mang lại cảm giác bo tròn, vui nhộn và năng động -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Nunito', sans-serif; 
+            /* Hình nền kết hợp Radial và Sunburst (Tia sáng toả ra) giống phong cách quảng cáo */
+            background-color: #15803d;
+            background-image: 
+                radial-gradient(circle at 50% 30%, rgba(74, 222, 128, 0.4) 0%, transparent 60%),
+                repeating-conic-gradient(from 0deg, rgba(255,255,255,0.05) 0deg 15deg, transparent 15deg 30deg);
+            background-attachment: fixed;
+        }
+        
+        /* Hiệu ứng 3D Text cho tiêu đề */
+        .text-3d {
+            color: #ffffff;
+            text-shadow: 0px 4px 0px #14532d, 0px 8px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Đổ bóng kiểu khối cứng (Playful Brutalism) tạo cảm giác năng động */
+        .playful-shadow {
+            box-shadow: 8px 10px 0px rgba(17, 94, 43, 0.6);
+        }
+
+        .btn-playful {
+            box-shadow: 0px 6px 0px #9a3412;
+            transition: all 0.1s;
+        }
+        .btn-playful:active {
+            transform: translateY(6px);
+            box-shadow: 0px 0px 0px #9a3412;
+        }
+        
+        .float-anim {
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        
+        .pulse-ring {
+            animation: ring 2s infinite;
+        }
+        @keyframes ring {
+            0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.5); }
+            70% { box-shadow: 0 0 0 20px rgba(249, 115, 22, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden text-slate-800">
+
+    <!-- Decorative floating elements -->
+    <div class="absolute top-10 left-10 text-white/20 float-anim" style="animation-delay: 0s;"><i data-lucide="sparkles" class="w-24 h-24"></i></div>
+    <div class="absolute bottom-10 right-10 text-white/20 float-anim" style="animation-delay: -2s;"><i data-lucide="zap" class="w-32 h-32"></i></div>
+
+    <div class="w-full max-w-3xl relative z-10 flex flex-col items-center">
+        
+        <!-- Header / Tittle -->
+        <div class="text-center mb-8 relative">
+            <h1 class="text-5xl md:text-6xl font-black tracking-tight text-3d mb-4 uppercase leading-tight">
+                TỰ ĐỘNG<br>ĐỊNH DẠNG VĂN BẢN
+            </h1>
+            <div class="inline-block bg-white text-green-700 font-bold px-6 py-2 rounded-full shadow-lg transform -rotate-2 hover:rotate-0 transition-transform">
+                ✨ Giáo viên định dạng chỉ với 1 Click! ✨
+            </div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="bg-white rounded-[2.5rem] p-6 sm:p-10 w-full playful-shadow border-4 border-white relative">
+            
+            <form id="uploadForm" action="/api/process" method="POST" enctype="multipart/form-data">
+                
+                <!-- Upload Dropzone -->
+                <div class="mb-8">
+                    <label id="dropzone" for="fileInput" class="flex flex-col items-center justify-center w-full h-64 border-4 border-dashed border-green-300 rounded-[2rem] cursor-pointer bg-green-50 hover:bg-green-100 hover:border-green-500 hover:scale-[1.02] transition-all duration-300 group relative">
+                        
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6 px-4 text-center z-10 relative">
+                            <!-- Icon -->
+                            <div class="w-20 h-20 mb-4 rounded-full bg-green-500 text-white shadow-lg flex items-center justify-center group-hover:bg-green-600 transition-colors float-anim pulse-ring">
+                                <i data-lucide="file-up" class="w-10 h-10"></i>
+                            </div>
+                            
+                            <h3 class="mb-2 text-2xl font-black text-green-700">
+                                KÉO THẢ FILE VÀO ĐÂY!
+                            </h3>
+                            <p class="text-base text-green-600 font-semibold mb-4 bg-white/60 px-4 py-1 rounded-full">
+                                Hoặc <span class="text-orange-600 underline">nhấn để chọn file</span> từ máy tính
+                            </p>
+                            
+                            <!-- File Success Indicator -->
+                            <div id="fileName" class="hidden items-center justify-center gap-2 bg-orange-500 text-white px-6 py-2 rounded-full shadow-md font-bold text-lg animate-bounce">
+                                <i data-lucide="party-popper" class="w-5 h-5"></i>
+                                <span class="truncate max-w-[250px]"></span>
+                            </div>
+                        </div>
+                        <input id="fileInput" name="file" type="file" class="hidden" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required />
+                    </label>
+                </div>
+
+                <!-- Action Area -->
+                <div class="text-center">
+                    <button type="submit" id="submitBtn" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-orange-400 to-orange-500 text-white font-black text-xl py-4 px-12 rounded-full btn-playful cursor-pointer hover:brightness-110">
+                        <i data-lucide="rocket" class="w-6 h-6"></i>
+                        <span>BIẾN HÌNH TÀI LIỆU!</span>
+                    </button>
+                    
+                    <!-- Loading State -->
+                    <div id="loading" class="hidden mt-4 flex-col items-center justify-center gap-3">
+                        <div class="flex space-x-3 bg-green-100 px-6 py-3 rounded-full">
+                            <div class="w-4 h-4 bg-green-500 rounded-full animate-bounce" style="animation-delay: 0s;"></div>
+                            <div class="w-4 h-4 bg-orange-500 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+                            <div class="w-4 h-4 bg-yellow-500 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+                            <span class="text-green-800 font-black ml-2">Đang chế tác...</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-8 text-center bg-green-900/40 px-6 py-2 rounded-full backdrop-blur-sm border border-green-800/50">
+            <p class="text-sm font-bold tracking-wide text-green-100">
+                COPYRIGHT &copy; NGUYEN MINH HOANG
+            </p>
+        </footer>
+    </div>
+
+    <!-- Script logic -->
+    <script>
+      lucide.createIcons();
+      
+      const dropzone = document.getElementById('dropzone');
+      const fileInput = document.getElementById('fileInput');
+      const fileNameDisplay = document.querySelector('#fileName span');
+      const fileNameContainer = document.getElementById('fileName');
+      const form = document.getElementById('uploadForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const loading = document.getElementById('loading');
+
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+          dropzone.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults (e) {
+          e.preventDefault();
+          e.stopPropagation();
+      }
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+          dropzone.addEventListener(eventName, () => {
+              dropzone.style.borderColor = '#f97316'; // Orange border on drag
+              dropzone.style.backgroundColor = '#fff7ed';
+          }, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+          dropzone.addEventListener(eventName, () => {
+              dropzone.style.borderColor = ''; 
+              dropzone.style.backgroundColor = '';
+          }, false);
+      });
+
+      dropzone.addEventListener('drop', handleDrop, false);
+
+      function handleDrop(e) {
+          const dt = e.dataTransfer;
+          const files = dt.files;
+          fileInput.files = files;
+          updateFileName();
+      }
+
+      fileInput.addEventListener('change', updateFileName);
+
+      function updateFileName() {
+          if(fileInput.files && fileInput.files[0]) {
+              fileNameDisplay.textContent = fileInput.files[0].name;
+              fileNameContainer.style.display = 'flex';
+          }
+      }
+      
+      form.addEventListener('submit', function() {
+          submitBtn.style.display = 'none';
+          loading.style.display = 'flex';
+          
+          setTimeout(() => {
+              submitBtn.style.display = 'inline-flex';
+              loading.style.display = 'none';
+          }, 3500);
+      });
+    </script>
+</body>
+</html>
